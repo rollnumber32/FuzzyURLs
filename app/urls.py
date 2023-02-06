@@ -3,6 +3,7 @@ from app import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [path("", views.index, name="index")] + static(
-    settings.STATIC_URL, document_root=settings.STATIC_ROOT
-)
+urlpatterns = [
+    path("", views.index, name="index"),
+    path("s/short", views.short, name="short"),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
