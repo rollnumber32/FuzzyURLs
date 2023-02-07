@@ -5,5 +5,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("s/short", views.short, name="short"),
+    path("short", views.short, name="short"),
+    path("mail", views.mailing, name="mail"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

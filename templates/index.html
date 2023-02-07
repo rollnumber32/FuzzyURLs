@@ -14,7 +14,7 @@
   </head>
   <body>
     <div class="container">
-      <form action="/s/short" method="POST">
+      <form action="/short" method="POST">
         {% csrf_token %}
         <input name="link" type="url" />
         <button type="submit">Shorten</button>

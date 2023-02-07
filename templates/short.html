@@ -13,6 +13,12 @@
       <div class="short-url">
         Your shortened URL is, <strong>{{new}}</strong>
       </div>
+      <form action="/mail" method="post">
+        {% csrf_token %}
+        <input type="email" name="mail" placeholder="Enter your email" />
+        <button type="submit">Send</button>
+      </form>
+      Sent? {{success}}
     </div>
   </body>
 </html>

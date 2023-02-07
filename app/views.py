@@ -1,8 +1,11 @@
+import json
 import os
 from django.shortcuts import render, redirect
 import uuid
 import urllib3
 from pymongo import MongoClient
+from django.core.mail import send_mail
+from django.conf import settings
 
 client = MongoClient(os.environ.get("URI"))
 db = client[os.environ.get("database")]
@@ -49,4 +52,25 @@ def short(request):
         else:
             return render(request, "index.html", {"status: False"})
 
+    return redirect("/")
+
+
+def mailing(request):
+    if request.method == "POST":
+        mail = request.POST["mail"]
+        user = request.COOKIES.get("key")
+        details = collection.find_one({"uid": user})
+        # details = json.loads(details)
+        msg = f"Hey,\nThanks for using FuzzyURLs.\nThe shortened link for {details['link']} is: {details['new']}.\nRegards,\nLakshay Mittal"
+        surl = details["new"]
+        try:
+            send_mail("FuzzyURLs", msg, settings.EMAIL_HOST_USER, [mail])
+            return render(
+                request, "short.html", {"user": user, "new": surl, "success": True}
+            )
+        except Exception as e:
+            print(e)
+            return render(
+                request, "short.html", {"user": user, "new": surl, "success": False}
+            )
     return redirect("/")
