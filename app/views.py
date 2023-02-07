@@ -43,7 +43,7 @@ def short(request):
 
         if valid == True:
             new_url = str(uuid.uuid4())[:5]
-            surl = "127.0.0.1/" + new_url
+            surl = "127.0.0.1:8000/" + new_url
             sch = {"uid": user, "link": url, "new": surl}
             collection.insert_one(sch)
             return render(
@@ -73,4 +73,17 @@ def mailing(request):
             return render(
                 request, "short.html", {"user": user, "new": surl, "success": False}
             )
+    return redirect("/")
+
+
+def open_url(request, uid):
+    if uid != "":
+        details = collection.find_one({"new": "127.0.0.1:8000/" + uid})
+        if details:
+            original_url = details["link"]
+            if original_url.startswith("http"):
+                return redirect(original_url)
+            else:
+                return redirect(f"http://{original_url}")
+
     return redirect("/")
